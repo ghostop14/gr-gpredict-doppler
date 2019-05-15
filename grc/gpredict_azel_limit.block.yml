@@ -1,0 +1,40 @@
+id: gpredict_azel_limit
+label: Az El Limit
+category: '[GPredict]'
+
+parameters:
+-   id: el_min
+    label: Min Elevation
+    dtype: float
+    default: '10.0'
+-   id: el_max
+    label: Max Elevation
+    dtype: float
+    default: '60.0'
+-   id: az_min
+    label: Min Azimuth
+    dtype: float
+    default: '0.0'
+-   id: az_max
+    label: Max Azimuth
+    dtype: float
+    default: '360.0'
+
+inputs:
+-   domain: message
+    id: az_el
+
+outputs:
+-   domain: message
+    id: state
+
+templates:
+    imports: import gpredict
+    make: gpredict.AzElLimit(${el_min}, ${el_max}, ${az_min}, ${az_max})
+
+documentation: |-
+    This block monitors an input message containing 'az' and 'el' keys in degrees, and if the resulting pair is within the specified min/max, a 'state' meta key is produced (1 for yes, 2 for no).
+
+    sNote that elevation will range from -90.0 to 90.0. Azimuth however can have min > max.  For instance to range between 300 degrees on one side and 40 degress on the other.
+
+file_format: 1

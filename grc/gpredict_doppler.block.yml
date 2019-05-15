@@ -1,0 +1,41 @@
+id: gpredict_doppler
+label: GPredict Doppler
+category: '[GPredict]'
+
+parameters:
+-   id: gpredict_host
+    label: Local Listening IP
+    dtype: enum
+    options: [localhost, 0.0.0.0]
+    option_labels: [Localhost, All IPs]
+-   id: gpredict_port
+    label: Listening Port
+    dtype: int
+    default: '7356'
+-   id: verbose
+    label: Verbose
+    dtype: bool
+    default: 'False'
+    options: ['False', 'True']
+    option_labels: ['No', 'Yes']
+
+outputs:
+-   domain: message
+    id: freq
+    optional: true
+-   domain: message
+    id: state
+    optional: true
+
+templates:
+    imports: import gpredict
+    make: gpredict.doppler("${gpredict_host}", ${gpredict_port}, ${verbose})
+
+documentation: |-
+    This block is an enhanced and modernized block for receiving GQRX-compatible radio commands from external systems such as gpredict.  The system listens on a TCP connection for the appropriate command, and when received the frequency is output on a message block that is compatible with other blocks such as the USRP source freq message input.  This output can also be used to set a flowgraph variable by feeding it to the "Message Pair to Var" block.
+
+    If the radio sends AOS (Acquisition of Signal) and LOS (Loss of Signal) messages (format is just "AOS\n" or "LOS\n"), the state message port will output a 1 (AOS) or a 0 (LOS) compatible with other state processing blocks in modules such as gr-filerepeater.
+
+    Also, for security, if you are using gpredict local, the gpredict listening IP can be set to localhost.
+
+file_format: 1
