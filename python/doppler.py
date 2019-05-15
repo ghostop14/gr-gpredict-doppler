@@ -41,17 +41,17 @@ class doppler_runner(threading.Thread):
       server.bind(bind_to)
       server.listen(0)
     except Exception as e:
-      print "[doppler] Error starting listener: %s" % str(e)
+      print("[doppler] Error starting listener: %s" % str(e))
       sys.exit(1)
 
     time.sleep(0.5) # TODO: Find better way to know if init is all done
 
     while not self.stopThread:
-      print "[doppler] Waiting for connection on: %s:%d" % bind_to
+      print("[doppler] Waiting for connection on: %s:%d" % bind_to)
       self.clientConnected = False
       self.sock, addr = server.accept()
       self.clientConnected = True
-      print "[doppler] Connected from: %s:%d" % (addr[0], addr[1])
+      print("[doppler] Connected from: %s:%d" % (addr[0], addr[1]))
 
       cur_freq = 0
       while not self.stopThread:
@@ -73,7 +73,7 @@ class doppler_runner(threading.Thread):
           if curCommand.startswith('F'):
             freq = int(curCommand[1:].strip())
             if cur_freq != freq:
-              if self.verbose: print "[doppler] New frequency: %d" % freq
+              if self.verbose: print("[doppler] New frequency: %d" % freq)
               
               self.blockclass.sendFreq(freq)
               cur_freq = freq
@@ -89,21 +89,21 @@ class doppler_runner(threading.Thread):
         
           if curCommand.startswith('AOS'):
             # Received Acquisition of signal.  Send state up
-            if self.verbose: print "[doppler] received AOS"
+            if self.verbose: print("[doppler] received AOS")
             self.sock.sendall("RPRT 0\n")
             self.blockclass.sendState(True)
           elif curCommand.startswith('LOS'):
             # Received loss of signal.  Send state down
-            if self.verbose: print "[doppler] received LOS"
+            if self.verbose: print("[doppler] received LOS")
             self.sock.sendall("RPRT 0\n")
             self.blockclass.sendState(False)
           elif not foundCommand:
-            print "[doppler] received unknown command: %s" % curCommand
+            print("[doppler] received unknown command: %s" % curCommand)
 
       self.sock.close()
       self.clientConnected = False
       self.sock = None
-      if self.verbose: print "[doppler] Disconnected from: %s:%d" % (addr[0], addr[1])
+      if self.verbose: print("[doppler] Disconnected from: %s:%d" % (addr[0], addr[1]))
 
 
 class doppler(gr.sync_block):

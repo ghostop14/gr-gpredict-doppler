@@ -19,7 +19,7 @@ class AzElLimit(gr.sync_block):
     
     if az_min <= az_max:
       if (az_min == az_max):
-        print "[azel_limit] WARNING azimuth min = azimuth max.  Results would only be good for 1 degree setting."
+        print("[azel_limit] WARNING azimuth min = azimuth max.  Results would only be good for 1 degree setting.")
         
       self.az_inverted = False
     else:
@@ -69,8 +69,8 @@ class AzElLimit(gr.sync_block):
           self.curState = False
           self.sendState(False)
     except Exception as e:
-      print "[azel_limit] Error with az/el message: %s" % str(e)
-      print str(meta)    
+      print("[azel_limit] Error with az/el message: %s" % str(e))
+      print(str(meta))
       
   def sendState(self,state):
     meta = {}  

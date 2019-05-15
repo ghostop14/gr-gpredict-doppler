@@ -33,18 +33,18 @@ class rotor_runner(threading.Thread):
       server.bind(bind_to)
       server.listen(0)
     except Exception as e:
-      print "[rotor] Error starting listener: %s" % str(e)
+      print("[rotor] Error starting listener: %s" % str(e))
       sys.exit(1)
           
     time.sleep(0.5) # TODO: Find better way to know if init is all done
     curState = False
 	
     while not self.stopThread:
-      print "[rotor] Waiting for connection on: %s:%d" % bind_to
+      print("[rotor] Waiting for connection on: %s:%d" % bind_to)
       self.clientConnected = False
       self.sock, addr = server.accept()
       self.clientConnected = True
-      print "[rotor] Connected from: %s:%d" % (addr[0], addr[1])
+      print("[rotor] Connected from: %s:%d" % (addr[0], addr[1]))
 
       cur_az = -9999.0
       cur_el = -9999.0
@@ -64,7 +64,7 @@ class rotor_runner(threading.Thread):
         
         for curCommand in commands:
           if curCommand.startswith('P'):
-            # if self.verbose: print "[rotor] Incoming rotor command: %s" % data
+            # if self.verbose: print("[rotor] Incoming rotor command: %s" % data)
             rotctl=curCommand.split()
             az=float(rotctl[1])
             el=float(rotctl[2])
@@ -73,11 +73,11 @@ class rotor_runner(threading.Thread):
               self.blockclass.sendAzEl(az,el)
             
             if cur_az != az:
-              if self.verbose: print "[rotor] New Azimuth: %f" % az
+              if self.verbose: print("[rotor] New Azimuth: %f" % az)
               cur_az = az
             
             if cur_el != el:
-              if self.verbose: print "[rotor] New Elevation: %f" % az
+              if self.verbose: print("[rotor] New Elevation: %f" % az)
             
               # deal with state based on elevation
               if (not curState) and el >= self.minEl:
@@ -114,7 +114,7 @@ class rotor_runner(threading.Thread):
             except:
               pass   
           else:
-            print "[rotor] Unknown command: %s" % curCommand
+            print("[rotor] Unknown command: %s" % curCommand)
             # Send report OK response
             try:
               self.sock.sendall("RPRT 0\n")
@@ -124,7 +124,7 @@ class rotor_runner(threading.Thread):
       self.sock.close()
       self.clientConnected = False
       self.sock = None
-      if self.verbose: print "[rotor] Disconnected from: %s:%d" % (addr[0], addr[1])
+      if self.verbose: print("[rotor] Disconnected from: %s:%d" % (addr[0], addr[1]))
 
 
 class rotor(gr.sync_block):

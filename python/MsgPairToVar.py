@@ -20,7 +20,7 @@ class MsgPairToVar(gr.sync_block):
       self.callback(newVal)
       
     except Exception as e:
-      print "[MsgPairTOVar] Error with message conversion: %s" % str(e)
+      print("[MsgPairTOVar] Error with message conversion: %s" % str(e))
     
   def stop(self):
     return True
